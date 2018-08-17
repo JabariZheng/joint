@@ -9908,6 +9908,15 @@ joint.dia.Graph = Backbone.Model.extend({
         return json;
     },
 
+    toJSONCustom: function() {
+
+        // Backbone does not recursively call `toJSON()` on attributes that are themselves                  models/collections.
+        // It just clones the attributes. Therefore, we must call `toJSON()` on the cells collection         explicitely.
+        var json = Backbone.Model.prototype.toJSON.apply(this, arguments);
+        json.cells = this.get('cells').models;
+        return json;
+    },
+
     fromJSON: function(json, opt) {
 
         if (!json.cells) {
